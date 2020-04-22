@@ -17,14 +17,21 @@ suite('Functional Tests', function () {
 
   suite('GET /api/stock-prices => stockData object', function () {
 
-    test.skip('1 stock', function (done) {
+    test('1 stock', function (done) {
       chai.request(server)
         .get('/api/stock-prices')
         .query({ stock: 'goog' })
         .end(function (err, res) {
-
-          //complete this one too
-
+          if (err) return done(err)
+          const { stockData } = res.body
+          assert.strictEqual(res.status, 200)
+          assert.isObject(stockData)
+          assert.property(stockData, 'stock')
+          assert.property(stockData, 'price')
+          assert.property(stockData, 'likes')
+          assert.strictEqual(stockData.stock, 'GOOG')
+          assert.isNumber(stockData.price)
+          assert.isNumber(stockData.likes)
           done()
         })
     })
