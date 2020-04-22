@@ -2,10 +2,14 @@
 
 const collection = require('./db')
 
-module.exports = {
-  test: async () => {
-    const db = await collection('test')
-    const result = await db.insertOne({ test: 'test' })
-    return result.ops[0]
-  }
+module.exports.add = async (symbol, ip) => {
+  const db = await collection(symbol)
+  const result = await db.findOne({ ip: ip })
+  if (!result) await db.insertOne({ ip: ip })
+}
+
+module.exports.count = async (symbol) => {
+  const db = await collection(symbol)
+  const cursor = db.find({})
+  return await cursor.count()
 }
