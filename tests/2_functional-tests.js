@@ -36,8 +36,17 @@ suite('Functional Tests', function () {
         })
     })
 
-    test.skip('1 stock with like', function (done) {
-
+    test('1 stock with like', function (done) {
+      chai.request(server)
+        .get('/api/stock-prices')
+        .query({ stock: 'goog', like: 'true' })
+        .end(function (err, res) {
+          if (err) return done(err)
+          const { stockData } = res.body
+          assert.strictEqual(res.status, 200)
+          assert.isAtLeast(stockData.likes, 1)
+          done()
+        })
     })
 
     test.skip('1 stock with like again (ensure likes are not double counted)', function (done) {
