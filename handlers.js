@@ -5,18 +5,35 @@ const likes = require('./model')
 
 module.exports.getPrices = async function (req, res, next) {
   const { stock, like } = req.query
+  if (!stock) return next()
+  const ip = req.ip
   try {
-    const { symbol, latestPrice } = await fetchStockData(stock)
-    if (like) await likes.add(symbol, req.ip)
-    res.json({
-      stockData: {
-        stock: symbol,
-        price: latestPrice,
-        likes: await likes.count(symbol)
+    if (Array.isArray(stock)) {
+      const stock0 = await getStockData(stock[0], like, ip)
+      const stock1 = await getStockData(stock[1], like, ip)
+      if (!stock0.error && !stock1.error) {
+        stock0.rel_likes = stock0.likes - stock1.likes
+        stock1.rel_likes = stock1.likes - stock0.likes
+        delete stock0.likes
+        delete stock1.likes
       }
-    })
+      res.json({ stockData: [stock0, stock1] })
+    } else {
+      res.json({ stockData: await getStockData(stock, like, ip) })
+    }
   } catch (error) {
     next(error)
+  }
+}
+
+async function getStockData (stock, like, ip) {
+  const { symbol, latestPrice } = await fetchStockData(stock)
+  if (!symbol) return { error: `${stock.toUpperCase()} not found` }
+  if (like) await likes.add(symbol, ip)
+  return {
+    stock: symbol,
+    price: latestPrice,
+    likes: await likes.count(symbol)
   }
 }
 
