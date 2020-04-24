@@ -127,5 +127,21 @@ suite('Functional Tests', function () {
           done()
         })
     })
+
+    test('1 of 2 stocks not found', function (done) {
+      chai.request(server)
+        .get(route)
+        .query({ stock: ['none', 'goog']})
+        .end(function (err, res) {
+          if (err) return done(err)
+          const {stockData} = res.body
+          assert.strictEqual(res.status, 200)
+          assert.isArray(stockData)
+          assert.strictEqual(stockData.length, 2)
+          assert.propertyVal(stockData[0], 'error', 'NONE not found')
+          assert.notProperty(stockData[1], 'rel_likes')
+          done()
+        })
+    })
   })
 })
