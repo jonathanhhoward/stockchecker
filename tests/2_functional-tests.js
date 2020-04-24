@@ -111,5 +111,21 @@ suite('Functional Tests', function () {
           done()
         })
     })
+
+    test('1 stock not found', function (done) {
+      chai.request(server)
+        .get(route)
+        .query({ stock: 'none' })
+        .end(function (err, res) {
+          if (err) return done(err)
+          const { stockData } = res.body
+          assert.strictEqual(res.status, 200)
+          assert.isObject(stockData)
+          assert.strictEqual(Object.keys(stockData).length, 1)
+          assert.property(stockData, 'error')
+          assert.strictEqual(stockData.error, 'NONE not found')
+          done()
+        })
+    })
   })
 })
