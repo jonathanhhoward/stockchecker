@@ -11,10 +11,19 @@ const chai = require('chai')
 const assert = chai.assert
 const server = require('../server')
 
+const collection = require('../db')
+
 chai.use(chaiHttp)
 
 suite('Functional Tests', function () {
   const route = '/api/stock-prices'
+
+  after(async function () {
+    const goog = await collection('GOOG')
+    await goog.drop()
+    const aapl = await collection('AAPL')
+    await aapl.drop()
+  })
 
   suite('GET /api/stock-prices => stockData object', function () {
     test('1 stock', function (done) {
