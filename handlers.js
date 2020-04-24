@@ -3,7 +3,7 @@
 const fetch = require('node-fetch')
 const likes = require('./model')
 
-module.exports.getPrices = async function (req, res, next) {
+exports.getPrices = async function (req, res, next) {
   const { stock, like } = req.query
   if (!stock) return next()
   const ip = req.ip
