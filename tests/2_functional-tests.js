@@ -17,7 +17,6 @@ suite('Functional Tests', function () {
   const route = '/api/stock-prices'
 
   suite('GET /api/stock-prices => stockData object', function () {
-
     test('1 stock', function (done) {
       chai.request(server)
         .get(route)
@@ -116,7 +115,5 @@ suite('Functional Tests', function () {
           done()
         })
     })
-
   })
-
 })
