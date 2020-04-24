@@ -27,7 +27,7 @@ module.exports.getPrices = async function (req, res, next) {
 }
 
 async function getStockData (stock, like, ip) {
-  const { symbol, latestPrice } = await fetchStockData(stock)
+  const { symbol, latestPrice } = await fetchStock(stock)
   if (!symbol) return { error: `${stock.toUpperCase()} not found` }
   if (like) await likes.add(symbol, ip)
   return {
@@ -37,7 +37,7 @@ async function getStockData (stock, like, ip) {
   }
 }
 
-async function fetchStockData (symbol) {
+async function fetchStock (symbol) {
   const url = `https://repeated-alpaca.glitch.me/v1/stock/${symbol}/quote`
   const res = await fetch(url)
   return res.json()
