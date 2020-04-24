@@ -32,7 +32,7 @@ suite('Functional Tests', function () {
           assert.property(stockData, 'likes')
           assert.strictEqual(stockData.stock, 'GOOG')
           assert.isNumber(stockData.price)
-          assert.isNumber(stockData.likes)
+          assert.strictEqual(stockData.likes, 0)
           done()
         })
     })
@@ -45,7 +45,7 @@ suite('Functional Tests', function () {
           if (err) return done(err)
           const { stockData } = res.body
           assert.strictEqual(res.status, 200)
-          assert.isAtLeast(stockData.likes, 1)
+          assert.strictEqual(stockData.likes, 1)
           done()
         })
     })
