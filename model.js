@@ -11,5 +11,5 @@ module.exports.add = async function (symbol, ip) {
 module.exports.count = async function (symbol) {
   const db = await collection(symbol)
   const cursor = db.find({})
-  return await cursor.count()
+  return cursor.count()
 }
