@@ -21,7 +21,7 @@ app.use(helmet.contentSecurityPolicy({
   }
 }))
 
-app.use('/public', express.static(`${__dirname}/public`))
+app.use('/public', express.static(`${process.cwd()}/public`))
 
 app.use(cors({ origin: '*' })) //For FCC testing purposes only
 
@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 //Index page (static HTML)
 app.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/views/index.html`)
+  res.sendFile(`${process.cwd()}/views/index.html`)
 })
 
 //For FCC testing purposes
