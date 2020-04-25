@@ -15,7 +15,10 @@ const app = express()
 
 app.use(helmet())
 app.use(helmet.contentSecurityPolicy({
-  directives: { defaultSrc: ['\'self\''] }
+  directives: {
+    scriptSrc: ['"self"', 'code.jquery.com'],
+    styleSrc: ['"self"']
+  }
 }))
 
 app.use('/public', express.static(`${__dirname}/public`))
